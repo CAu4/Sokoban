@@ -1,6 +1,8 @@
 package Sokoban;
 
 import java.awt.Graphics;
+
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class MonPanel extends JPanel {
@@ -10,7 +12,9 @@ public class MonPanel extends JPanel {
     
     public MonPanel(FenetrePrincipale fenetrePrincipale) {
         maFenetrePrincipale = fenetrePrincipale;
+   
     }
+   
     /**
      * Gestionnaire d'evenement associe a l'evenement "paint" du panel.
      */
