@@ -241,6 +241,15 @@ public class Plateau extends Coordonnees {
     }
     
     /**
+     * @brief setPersonnage() : Mutateur de m_perso
+     * @param p : Case
+     */
+    public void setPersonnage(Case p) {
+        m_perso.setX(p.getX());
+        m_perso.setY(p.getY());
+    }
+    
+    /**
      * @brief updateCoordonnees : Permet de récupérer les nouvelles coordonnées après le déplacement
      * @param coord : Coordonnées de l'objet avant le déplacement
      * @param d : entier correspondant à la direction de déplacement
@@ -313,6 +322,7 @@ public class Plateau extends Coordonnees {
 
                 // mise à jour du nombre de mouvements :
                 mvt = mvt + 1;
+                setMvt(mvt);
             }
             break;
 
@@ -348,6 +358,7 @@ public class Plateau extends Coordonnees {
 
                 // mise à jour du nombre de mouvements :
                 mvt = mvt + 1;
+                setMvt(mvt);
             }
             break;
 
@@ -387,6 +398,7 @@ public class Plateau extends Coordonnees {
 
                     // mise à jour du nombre de mouvements :
                     mvt = mvt + 1;
+                    setMvt(mvt);
                 }
             }
             break;
