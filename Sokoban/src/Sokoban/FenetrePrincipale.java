@@ -3,6 +3,8 @@ package Sokoban;
 import java.awt.Color;
 import java.awt.event.KeyListener;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
+
 import javax.swing.ImageIcon;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
@@ -31,43 +34,107 @@ public class FenetrePrincipale extends JFrame {
 	private MonPanel contentPane;
 	
 	private Plateau plateauCourant;
+	private Plateau plateauAnnulation;
+	
+	private int m_annulation = 0;
+	
+	private int m_score = 0;
 
 	/**
 	 * Create the frame.
 	 */
-	public FenetrePrincipale() {
+	public FenetrePrincipale(int niv) {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100,300,700,700);
+		
+		contentPane = new MonPanel(this);
+		this.setContentPane(contentPane);
+		
+		plateauCourant = new Plateau(20, 10, niv);
+		plateauAnnulation = new Plateau(20, 10, niv);
+		
+		JLabel labelMvt = new JLabel("Mouvements : " + plateauCourant.getMvt());
+		labelMvt.setBounds(545,60,120,40);
+		contentPane.add(labelMvt);
+		
+		JLabel labelNumNiveau = new JLabel("NIVEAU : " + plateauCourant.getNiveau());
+		labelNumNiveau.setBounds(300,10,120,40);
+		contentPane.add(labelNumNiveau);
+		
 		addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				formKeyPressed(e);
+				labelMvt.setText("Mouvements : " + plateauCourant.getMvt());
 			}
 		});
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 700, 1000);
 		
-		contentPane = new MonPanel(this);
-		this.setContentPane(contentPane);
-		// rendre non focusable
-		contentPane.setFocusable(false);
+		JButton annulerButton = new JButton("Annuler");
+		annulerButton.setActionCommand("Annuler");
+		annulerButton.setBounds(550,100,100,40);
+		contentPane.add(annulerButton);
+		annulerButton.setFocusable(false);
+		annulerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				plateauCourant.setGrillePlateau(plateauAnnulation.getGrillePlateau());
+			    plateauCourant.setPersonnage(plateauAnnulation.getPersonnage());
+			    plateauCourant.setListeCasesMarquees(plateauAnnulation.getListeCaisses());
+			    int move = plateauCourant.getMvt();
+			    if (m_annulation == 0)
+			    {
+			        if (move > 0)
+			            move = (move - 1);
+			        else
+			            move = 0;
+			        plateauCourant.setMvt(move);
+			    }
+			    m_annulation = 1;
+			    dessinerGrille(getContentPane().getGraphics());
+			}
+		});
 		
-		plateauCourant = new Plateau(20, 10, 0);
+		JButton recommencerButton = new JButton("Recommencer");
+		recommencerButton.setActionCommand("Recommencer");
+		recommencerButton.setBounds(550,150,100,40);
+		contentPane.add(recommencerButton);
+		recommencerButton.setFocusable(false);
+		recommencerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				plateauCourant = new Plateau(20, 10, niv);
+				plateauAnnulation = new Plateau(20, 10, niv);
+				dessinerGrille(getContentPane().getGraphics());
+			}
+		});
 		
+		JButton quitterButton = new JButton("Quitter");
+		quitterButton.setActionCommand("Quitter");
+		quitterButton.setBounds(550, 200, 100, 40);
+		contentPane.add(quitterButton);
+		quitterButton.setFocusable(false);
+		quitterButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		
+		contentPane.setFocusable(false);	
 	}
 	
 	public void dessinerGrille (Graphics g) {
 		
 		Graphics bufferGraphics;
 	    Image offscreen;
-	    
-	    // On crée une image en mémoire de la taille du ContentPane
-	    offscreen = createImage(this.getContentPane().getWidth(),this.getContentPane().getHeight());
-	    // On récupère l'objet de type Graphics permettant de dessiner dans cette image
-	    bufferGraphics = offscreen.getGraphics();
 		
 		ArrayList<ImageGrille> listeImageGrille = new ArrayList<ImageGrille>();
 		int type;
 	    int nbCaseLargeur;
 	    int nbCaseHauteur;
+	    
+	    // On crée une image en mémoire de la taille du ContentPane
+	    offscreen = createImage(plateauCourant.getLargeur(),plateauCourant.getLongueur());
+	    // On récupère l'objet de type Graphics permettant de dessiner dans cette image
+	    bufferGraphics = offscreen.getGraphics();
+	    
 	    nbCaseLargeur = plateauCourant.getLargeur()/60;
 	    nbCaseHauteur = plateauCourant.getLongueur()/60;
 	    Case[][] grille;
@@ -83,19 +150,17 @@ public class FenetrePrincipale extends JFrame {
 	            switch(type) {
 	                // case vide = chemin
 	                case 0 :
-	                	ImageGrille icone0 = new ImageGrille((35 + j*60), (75 + i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/ground_03.png");
-	                	//icone0 = icone0.getScaledInstance(60, 60,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-
+	                	ImageGrille icone0 = new ImageGrille((j*60), (i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/ground_03.png");
 	                	listeImageGrille.add(icone0);
 	                break;
 	                // case mur
 	                case 1 :
-	                	ImageGrille icone1 = new ImageGrille((35 + j*60), (75 + i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/crate_01.png");
+	                	ImageGrille icone1 = new ImageGrille((j*60), (i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/crate_01.png");
 	                	listeImageGrille.add(icone1);
 	                break;
 	                // case marquée
 	                case 2 :
-	                	ImageGrille icone2 = new ImageGrille((35 + j*60), (75 + i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/environment.png");
+	                	ImageGrille icone2 = new ImageGrille((j*60), (i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/environment.png");
 	                	listeImageGrille.add(icone2);
 	                break;
 	                // caisse
@@ -107,19 +172,19 @@ public class FenetrePrincipale extends JFrame {
 	                    // si elle n'est pas bien placée, on affiche une caisse classique
 	                    if (listeCaisse[k].getEtatCaisse() == false)
 	                    {
-	                    	ImageGrille icone31 = new ImageGrille((35 + j*60), (75 + i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/crate_42.png");
+	                    	ImageGrille icone31 = new ImageGrille((j*60), (i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/crate_42.png");
 		                	listeImageGrille.add(icone31);
 	                    }
 	                    // si elle est bien placée, on affiche la caisse sombre
 	                    else
 	                    {
-	                    	ImageGrille icone32 = new ImageGrille((35 + j*60), (75 + i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/crate_07.png");
+	                    	ImageGrille icone32 = new ImageGrille((j*60), (i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/crate_07.png");
 		                	listeImageGrille.add(icone32);
 	                    }
 	                break;
 	                // personnage
 	                case 4 :
-	                	ImageGrille icone4 = new ImageGrille((35 + j*60), (75 + i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/player_05.png");
+	                	ImageGrille icone4 = new ImageGrille((j*60), (i*60),  60, 60, "/Users/justinemoulin/Sokoban2/images/player.png");
 	                	listeImageGrille.add(icone4);
 	                break;
 	            }
@@ -130,13 +195,17 @@ public class FenetrePrincipale extends JFrame {
 	    	img.dessiner(bufferGraphics);
 	    }
 	    // On afficher l'image mémoire à l'écran
-	    g.drawImage(offscreen,10,10,null);
+	    g.drawImage(offscreen, 30, 60, null);
+		
 	}
 
 	private void formKeyPressed(java.awt.event.KeyEvent evt) {
-		  //if (evt.getKeyCode() == KeyEvent.VK_UP ) {}
 		Coordonnees coordP = new Coordonnees((plateauCourant.getPersonnage()).getX(), (plateauCourant.getPersonnage()).getY());
-	    switch (evt.getKeyCode())
+		plateauAnnulation.setGrillePlateau(plateauCourant.getGrillePlateau());
+		plateauAnnulation.setPersonnage(plateauCourant.getPersonnage());
+	    plateauAnnulation.setListeCasesMarquees(plateauCourant.getListeCaisses());
+		
+		switch (evt.getKeyCode())
 	    {
 	        // déplacement avec mes flèches du clavier
 	        case KeyEvent.VK_UP:
@@ -152,9 +221,12 @@ public class FenetrePrincipale extends JFrame {
 	        	plateauCourant.deplacerPersonnage(coordP, 4);
 	        break;
 	    }
-	    dessinerGrille(this.getContentPane().getGraphics());
+	    
+		dessinerGrille(this.getContentPane().getGraphics());
+	    
 	    // doit-on passer au niveau suivant ?
 	    niveauSuivant();
+	    m_annulation = 0;
 	}
 	
 	/**
@@ -163,13 +235,15 @@ public class FenetrePrincipale extends JFrame {
     public void niveauSuivant() {
     	int n = plateauCourant.getNiveau();
     	// Création de la boite en mémoire
-        DialogueNiveaux boiteNiv = new DialogueNiveaux();
+        DialogueNiveaux boiteNiv = new DialogueNiveaux(n);
         
         // on regarde si le niveau est fini
         if (plateauCourant.niveauTermine() == true)
         {
-            boiteNiv.setVisible(true);
+        	boiteNiv.setVisible(true);
+            dispose();
         }
+        
     }
 		    
 }
