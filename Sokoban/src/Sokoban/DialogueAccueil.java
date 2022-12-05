@@ -50,9 +50,7 @@ public class DialogueAccueil extends JDialog {
 				buttonPane.add(jouerButton);
 				jouerButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						FenetrePrincipale frame = new FenetrePrincipale(0);
-						frame.setLayout(null);
-						frame.setVisible(true);
+						DialogueUsername username = new DialogueUsername();
 						dispose();
 					}
 				});
