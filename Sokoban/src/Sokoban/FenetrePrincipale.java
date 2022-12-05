@@ -38,12 +38,12 @@ public class FenetrePrincipale extends JFrame {
 	
 	private int m_annulation = 0;
 	
-	private int m_score = 0;
+	private String m_pseudo = "";
 
 	/**
 	 * Create the frame.
 	 */
-	public FenetrePrincipale(int niv) {
+	public FenetrePrincipale(int niv, String username) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100,300,700,700);
 		
@@ -52,6 +52,8 @@ public class FenetrePrincipale extends JFrame {
 		
 		plateauCourant = new Plateau(20, 10, niv);
 		plateauAnnulation = new Plateau(20, 10, niv);
+		
+		m_pseudo = username;
 		
 		JLabel labelMvt = new JLabel("Mouvements : " + plateauCourant.getMvt());
 		labelMvt.setBounds(545,60,120,40);
@@ -76,17 +78,19 @@ public class FenetrePrincipale extends JFrame {
 		annulerButton.setFocusable(false);
 		annulerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				plateauCourant.setGrillePlateau(plateauAnnulation.getGrillePlateau());
-			    plateauCourant.setPersonnage(plateauAnnulation.getPersonnage());
-			    plateauCourant.setListeCasesMarquees(plateauAnnulation.getListeCaisses());
-			    int move = plateauCourant.getMvt();
 			    if (m_annulation == 0)
 			    {
+			    	plateauCourant.setGrillePlateau(plateauAnnulation.getGrillePlateau());
+				    plateauCourant.setPersonnage(plateauAnnulation.getPersonnage());
+				    plateauCourant.setListeCasesMarquees(plateauAnnulation.getListeCaisses());
+				    int move = plateauCourant.getMvt();
+				    int s = plateauCourant.getScore();
 			        if (move > 0)
 			            move = (move - 1);
 			        else
 			            move = 0;
 			        plateauCourant.setMvt(move);
+			        plateauCourant.setScore(s-10);
 			    }
 			    m_annulation = 1;
 			    dessinerGrille(getContentPane().getGraphics());
@@ -100,8 +104,12 @@ public class FenetrePrincipale extends JFrame {
 		recommencerButton.setFocusable(false);
 		recommencerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				int s = plateauCourant.getScore();
+				
 				plateauCourant = new Plateau(20, 10, niv);
+				plateauCourant.setScore(s-50);
 				plateauAnnulation = new Plateau(20, 10, niv);
+				
 				dessinerGrille(getContentPane().getGraphics());
 			}
 		});
@@ -113,6 +121,7 @@ public class FenetrePrincipale extends JFrame {
 		quitterButton.setFocusable(false);
 		quitterButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				DialogueFin fin = new DialogueFin();
 				dispose();
 			}
 		});
@@ -234,12 +243,11 @@ public class FenetrePrincipale extends JFrame {
      */
     public void niveauSuivant() {
     	int n = plateauCourant.getNiveau();
-    	// Création de la boite en mémoire
-        DialogueNiveaux boiteNiv = new DialogueNiveaux(n);
-        
-        // on regarde si le niveau est fini
+    	int s = plateauCourant.getScore();
+    	
         if (plateauCourant.niveauTermine() == true)
         {
+        	DialogueNiveaux boiteNiv = new DialogueNiveaux(n,s, m_pseudo);
         	boiteNiv.setVisible(true);
             dispose();
         }

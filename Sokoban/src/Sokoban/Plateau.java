@@ -56,6 +56,10 @@ public class Plateau extends Coordonnees {
      * @brief mvt : entier correspondant au nombre de mouvements effectués par le joueur
      */
     private int mvt;
+    /**
+     * @brief score : entier correspondant au nombre de points accumulés par le joueur
+     */
+    private int score;
     
     // liste des méthodes
     /**
@@ -90,6 +94,7 @@ public class Plateau extends Coordonnees {
           int c=0;
           // lecture des informations du débuts de fichier
           m_niveau = Integer.parseInt(br.readLine());
+          score = m_niveau*100;
           m_nbCaisse = Integer.parseInt(br.readLine());  
           m_largeur = Integer.parseInt(br.readLine());
           m_longueur = Integer.parseInt(br.readLine());
@@ -177,6 +182,13 @@ public class Plateau extends Coordonnees {
     	return mvt;
     }
     /**
+     * @brief getScore : Ascesseur de score
+     * @return entier correspondantau score du joueur
+     */
+    public int getScore() {
+    	return score;
+    }
+    /**
      * @brief getGrillePlateau() : Ascesseur de grillePlateau
      * @return Case[][]
      */
@@ -210,6 +222,13 @@ public class Plateau extends Coordonnees {
      */
     public void setMvt(int m) {
     	mvt = m;
+    }
+    /**
+     * @brief setScore() : Mutateur de score
+     * @param s : entier
+     */
+    public void setScore(int s) {
+    	score = s;
     }
     /**
      * @brief setGrillePlateau() : Mutateur de grillePlateau
@@ -323,6 +342,7 @@ public class Plateau extends Coordonnees {
                 // mise à jour du nombre de mouvements :
                 mvt = mvt + 1;
                 setMvt(mvt);
+                setScore(score-1);
             }
             break;
 
@@ -359,6 +379,7 @@ public class Plateau extends Coordonnees {
                 // mise à jour du nombre de mouvements :
                 mvt = mvt + 1;
                 setMvt(mvt);
+                setScore(score-1);
             }
             break;
 
@@ -399,6 +420,7 @@ public class Plateau extends Coordonnees {
                     // mise à jour du nombre de mouvements :
                     mvt = mvt + 1;
                     setMvt(mvt);
+                    setScore(score-1);
                 }
             }
             break;
