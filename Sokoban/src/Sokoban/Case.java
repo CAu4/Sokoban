@@ -6,7 +6,6 @@ package Sokoban;
  * @details Cette classe modélise les cases constituant la grille de jeu
  * @author Justine Moulin
  */
-
 public class Case extends Coordonnees {
 	
 	// liste des attributs
@@ -27,6 +26,7 @@ public class Case extends Coordonnees {
     	super(x, y); // appel au constructeur de Coordonnées
     	m_type = type;
     }
+    
     /**
      * @brief getType : ascesseur du type
      * @return type : entier correspondant au type de la case considérée
@@ -34,6 +34,7 @@ public class Case extends Coordonnees {
     public int getType() {
     	return m_type;
     }
+    
     /**
      * @brief setType : mutateur du type
      * @param type : entier

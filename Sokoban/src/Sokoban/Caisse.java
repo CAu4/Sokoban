@@ -6,7 +6,6 @@ package Sokoban;
  * @details Cette classe modélise les caisses pouvant être pousée par le joueur
  * @author Justine Moulin
  */
-
 public class Caisse extends Coordonnees {
 	
 	// liste des attributes
@@ -27,6 +26,7 @@ public class Caisse extends Coordonnees {
     	super(x,y); // appel au constructeur de coordonnées
     	m_etatCaisse = etat;
     }
+    
     /**
      * @brief getEtatCaisse : ascesseur de m_etatCaisse
      * @return m_etatCaisse
@@ -34,6 +34,7 @@ public class Caisse extends Coordonnees {
     public boolean getEtatCaisse() {
     	return m_etatCaisse;
     }
+    
     /**
      * @brief setEtatCaisse : mutateur de m_etatCaisse
      * @param etat : booléen 

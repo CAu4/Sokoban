@@ -6,7 +6,6 @@ package Sokoban;
  * @details Cette classe permet décrire les emplacements graphiques des objets
  * @author Justine Moulin
  */
-
 public class Coordonnees {
 	
 	// liste des attributs
@@ -15,6 +14,7 @@ public class Coordonnees {
      * @detail vaut 0 par défaut
      */
 	protected int m_x = 0;
+	
 	/**
      * @brief m_y : entier correspondant à l'ordonnée
      * @detail vaut 0 par défaut
@@ -32,6 +32,7 @@ public class Coordonnees {
 	    m_x = x;
 	    m_y = y;
 	}
+	
 	/**
      * @brief setX : mutateur de x
      * @param x : entier
@@ -40,6 +41,7 @@ public class Coordonnees {
 	{
 		m_x = x;
 	}
+	
 	/**
      * @brief setY : mutateur de y
      * @param y : entier
@@ -48,6 +50,7 @@ public class Coordonnees {
 	{
 		m_y = y;
 	}
+	
 	/**
      * @brief getX : ascesseur de x
      * @return m_x : entier 
@@ -56,6 +59,7 @@ public class Coordonnees {
 	{
 		return m_x;
 	}
+	
 	/**
      * @brief getY : ascesseur de y
      * @return m_y : entier 

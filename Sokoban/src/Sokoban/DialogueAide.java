@@ -1,7 +1,6 @@
 package Sokoban;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -15,12 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 /**
- * @file DialogueAccueil.java
- * @brief Contient la déclaration de la classe DialogueAcceuil qui hérite de la classe JDialog
- * @details Correspond à la page d'accueil du jeu
+ * @file DialogueAide.java
+ * @brief Contient la déclaration de la classe DialogueAide qui hérite de la classe JDialog
+ * @details Contient les consignes du jeu
  * @author Justine Moulin
  */
-public class DialogueAccueil extends JDialog {
+public class DialogueAide extends JDialog {
 
 	/**
      * @brief contantPane : JPanel
@@ -29,45 +28,42 @@ public class DialogueAccueil extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 
 	/**
-     * @brief DialogueAccueil()
-     * @detail constructeur de la classe DialogueAccueil
+     * @brief DialogueAide()
+     * @detail constructeur de la classe DialogueAide
      */
-	public DialogueAccueil() {
-		// emplacement sur l'écran et dimenion de la fenêtre
-		setBounds(100,100, 700, 500);
-		// initialisation du contentPane
+	public DialogueAide() {
+		// emplacement dans l'écran et dimension de la fenêtre
+		setBounds(100,100, 1000, 630);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
-		// Image de fond 
+		// image de fond
 		JLabel label = new JLabel();
-		ImageIcon img = new ImageIcon("images/menu.jpg");
-		// redimensionnement de l'image
+		ImageIcon img = new ImageIcon("images/aide.png");
+		// redimensionnement
 		Image image = img.getImage();
-		Image newimg = image.getScaledInstance(700, 500,  java.awt.Image.SCALE_SMOOTH);  
+		Image newimg = image.getScaledInstance(800, 550,  java.awt.Image.SCALE_SMOOTH);  
 		ImageIcon imageFinale = new ImageIcon(newimg);
 		label.setIcon(imageFinale);
-        label.setBounds(0, 0, 700, 500);
+        label.setBounds(0, 0, 800, 550);
         contentPanel.add(label);
         
         this.setVisible(true);
 		
         getContentPane().add(contentPanel, BorderLayout.CENTER);
 		{
-			// déclaration du bouton Jouer
+			// déclaration du bouton quitter
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton jouerButton = new JButton("Jouer");
-				jouerButton.setActionCommand("Jouer");
-				buttonPane.add(jouerButton);
-				jouerButton.addActionListener(new ActionListener() {
-					// ouverture de DialogueUsername au clic sur le bouton
+				JButton quitterButton = new JButton("Quitter");
+				quitterButton.setActionCommand("Quitter");
+				buttonPane.add(quitterButton);
+				quitterButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						DialogueUsername username = new DialogueUsername();
-						dispose(); // fermeture de la fenêtre de dialogue
+						dispose(); // ferme la fenêtre de dialogue
 					}
 				});
 				
@@ -75,5 +71,4 @@ public class DialogueAccueil extends JDialog {
 			
 		}
 	}
-
 }
